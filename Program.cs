@@ -22,22 +22,22 @@ client.Prepared
       );
 
 // message awaiting functions
-client.MessageCreated
-    .Where(msgCreated => msgCreated.Content.StartsWith(prefix + "ping"))
-    .Subscribe(async msgCreated => {
-        Embed embed = new Embed();
-        embed.Title = "Pong!";
-       // embed.SetImage(new EmbedMedia("https://img.guildedcdn.com/UserAvatar/ccc500d83a66329ead7313f8e872ef02-Medium.png"));
-        embed.AddField("Bot Author ID", client.Me.CreatedBy);
-        embed.SetFooter(client.Me.Name, "https://img.guildedcdn.com/UserAvatar/ccc500d83a66329ead7313f8e872ef02-Medium.png");
-    
-        await msgCreated.ReplyAsync(embeds: embed);
-        
-    }
-);
+
 try
 {
+    client.MessageCreated
+        .Where(msgCreated => msgCreated.Content.StartsWith(prefix + "ping"))
+        .Subscribe(async msgCreated => {
+            Embed embed = new Embed();
+            embed.Title = "Pong!";
+        // embed.SetImage(new EmbedMedia("https://img.guildedcdn.com/UserAvatar/ccc500d83a66329ead7313f8e872ef02-Medium.png"));
+        embed.AddField("Bot Author ID", client.Me.CreatedBy);
+            embed.SetFooter(client.Me.Name, "https://img.guildedcdn.com/UserAvatar/ccc500d83a66329ead7313f8e872ef02-Medium.png");
 
+            await msgCreated.ReplyAsync(embeds: embed);
+
+        }
+    );
     client.MessageCreated
         .Where(msgCreated => msgCreated.Content.StartsWith(prefix + "purge"))
         .Subscribe(async msgCreated =>
