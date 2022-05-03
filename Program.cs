@@ -5,6 +5,7 @@ using Biko;
 using Guilded;
 using Guilded.Base;
 using Guilded.Base.Embeds;
+using Guilded.Base.Servers;
 using Guilded.Base.Users;
 using Newtonsoft.Json.Linq;
 
@@ -25,6 +26,23 @@ client.Prepared
 
 try
 {
+    client.MessageCreated
+       .Subscribe(async msgCreated =>
+       {
+           var messagetoxic = ChatML.CheckMessage(msgCreated.Content);
+           Console.WriteLine(messagetoxic);
+           var user = await client.GetMemberAsync(msgCreated.ServerId ?? new HashId(" "), msgCreated.CreatedBy);
+
+           if (messagetoxic > 0.9 && user.Id.ToString() != client.Me.Id.ToString())
+           {
+               await msgCreated.ReplyAsync("Message deemed toxic origenal message: \n ||" + msgCreated.Content + "||",true,false);
+               await msgCreated.DeleteAsync();
+           }
+           
+
+
+       }
+   );
     client.MessageCreated
         .Where(msgCreated => msgCreated.Content.StartsWith(prefix + "ping"))
         .Subscribe(async msgCreated => {
@@ -138,7 +156,8 @@ try
 
         }
     );
-
+    
+  
 }
 catch (Exception ex)
 {
